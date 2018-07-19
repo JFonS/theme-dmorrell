@@ -1,8 +1,7 @@
-# Chris Morrell's Fish Theme
+# DMorrell Fish Theme
 
-This is a theme I designed for myself but have given to a few friends and decided to publish for others' enjoyment.
-
-![Chris Morrell's Fish Theme](https://cloud.githubusercontent.com/assets/21592/4770904/8a58e026-5b89-11e4-927c-42a387b41df0.gif)
+This is a theme derived from [cmorrell](https://github.com/oh-my-fish/theme-cmorrell.com), because `d` comes after `c`.
+I disliked a few details and decided to give the child a home and name.
 
 ## Features
 
