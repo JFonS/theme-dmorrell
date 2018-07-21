@@ -5,6 +5,8 @@ This is a theme for
 that focuses on staying out of the way while giving helpful information,
 in particular when working with Git.
 
+![2018-07-22 00 48 23 screenshot](https://user-images.githubusercontent.com/4246780/43040637-45c207ee-8d49-11e8-9bd4-d6990a665487.png)
+
 ## Features
 
 - Minimal base prompt.
