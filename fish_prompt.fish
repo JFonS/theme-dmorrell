@@ -1,5 +1,25 @@
+# "Icons"
+set -g __dmorrell_prompt_icon_fail    "⌁"
+set -g __dmorrell_prompt_icon_success "—"
+set -g __dmorrell_prompt_icon_ssh     " SSH: "
+set -g __dmorrell_prompt_icon_prompt  "\$"
+set -g __dmorrell_prompt_icon_root    "!"
+
+# Colors
+set -g __dmorrell_prompt_color_fail    "brred"
+set -g __dmorrell_prompt_color_success "green"
+
+set -g __dmorrell_prompt_color_ssh_bg  "blue"
+set -g __dmorrell_prompt_color_ssh_fg  "white"
+
+set -g __dmorrell_prompt_color_user "yellow"
+set -g __dmorrell_prompt_color_host "green"
+set -g __dmorrell_prompt_color_path "yellow"
+
+set -g __dmorrell_prompt_color_prompt  "555"
+
 ## Function to show a segment
-function prompt_segment -d "Function to show a segment"
+function __dmorrell_prompt_segment -d "Function to show a segment"
   # Get colors
   set -l bg $argv[1]
   set -l fg $argv[2]
@@ -15,67 +35,83 @@ function prompt_segment -d "Function to show a segment"
 end
 
 ## Function to show current status
-function show_status -d "Function to show the current status"
+function __dmorrell_show_status -d "Function to show the current status"
   if [ $RETVAL -ne 0 ]
-    prompt_segment normal red "🗲"
+    __dmorrell_prompt_segment \
+      normal \
+      $__dmorrell_prompt_color_fail \
+      $__dmorrell_prompt_icon_fail
   else
-    prompt_segment normal green "—"
+    __dmorrell_prompt_segment \
+      normal \
+      $__dmorrell_prompt_color_success \
+      $__dmorrell_prompt_icon_success
   end
   if [ -n "$SSH_CLIENT" ]
-      prompt_segment blue white " SSH: "
+      __dmorrell_prompt_segment \
+        $__dmorrell_prompt_color_ssh_bg \
+        $__dmorrell_prompt_color_ssh_fg \
+        $__dmorrell_prompt_icon_ssh
     end
 end
 
-function show_virtualenv -d "Show active python virtual environments"
+function __dmorrell_show_virtualenv -d "Show active python virtual environments"
   if set -q VIRTUAL_ENV
     set -l venvname (basename "$VIRTUAL_ENV")
-    prompt_segment normal white " ($venvname) "
+    __dmorrell_prompt_segment normal white " ($venvname) "
   end
 end
 
 ## Show user if not in default users
-function show_user -d "Show user"
+function __dmorrell_show_user -d "Show user"
   if not contains $USER $default_user; or test -n "$SSH_CLIENT"
     set -l host (hostname -s)
     set -l who (whoami)
-    prompt_segment normal yellow " $who"
+   __dmorrell_prompt_segment normal $__dmorrell_prompt_color_user " $who"
 
     # Skip @ bit if hostname == username
     if [ "$USER" != "$HOST" ]
-      prompt_segment normal white "@"
-      prompt_segment normal green "$host "
+      __dmorrell_prompt_segment normal white "@"
+      __dmorrell_prompt_segment normal $__dmorrell_prompt_color_host "$host "
     end
   else
-    prompt_segment normal normal " "
+    __dmorrell_prompt_segment normal normal " "
   end
 end
 
-function _set_venv_project --on-variable VIRTUAL_ENV
+function __dmorrell_set_venv_project --on-variable VIRTUAL_ENV
     if test -e $VIRTUAL_ENV/.project
         set -g VIRTUAL_ENV_PROJECT (cat $VIRTUAL_ENV/.project)
     end
 end
 
 # Show directory
-function show_pwd -d "Show the current directory"
+function __dmorrell_show_pwd -d "Show the current directory"
   set -l pwd
   if [ (string match -r '^'"$VIRTUAL_ENV_PROJECT" $PWD) ]
     set pwd (string replace -r '^'"$VIRTUAL_ENV_PROJECT"'($|/)' '≫ $1' $PWD)
   else
     set pwd (prompt_pwd)
   end
-  prompt_segment normal yellow "$pwd"
+  __dmorrell_prompt_segment normal $__dmorrell_prompt_color_path "$pwd"
 end
 
 # Show prompt w/ privilege cue
-function show_prompt -d "Shows prompt with cue for current priv"
+function __dmorrell_show_prompt -d "Shows prompt with cue for current priv"
   set -l uid (id -u $USER)
-    if [ $uid -eq 0 ]
-    prompt_segment red white " ! "
+  
+  if [ $uid -eq 0 ] # This is root!
+    __dmorrell_prompt_segment \
+      red \
+      $__dmorrell_prompt_color_prompt \
+      " $__dmorrell_prompt_icon_root "
     set_color normal
     echo -n -s " "
   else
-    prompt_segment normal white " \$ "
+    __dmorrell_prompt_segment \
+      normal \
+      $__dmorrell_prompt_color_prompt \
+      " $__dmorrell_prompt_icon_prompt "
   end
 
   set_color normal
@@ -84,9 +120,9 @@ end
 ## SHOW PROMPT
 function fish_prompt
   set -g RETVAL $status
-  show_status
-  show_virtualenv
-  show_user
-  show_pwd
-  show_prompt
+  __dmorrell_show_status
+  __dmorrell_show_virtualenv
+  __dmorrell_show_user
+  __dmorrell_show_pwd
+  __dmorrell_show_prompt
 end
