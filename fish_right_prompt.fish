@@ -79,7 +79,7 @@ function __dmorrell_print_git_status -d "Gets the current git status"
     set -l new (command git status --porcelain=v1 --ignore-submodules=dirty \
                 | grep -e '^ \?A' | wc -l)
     set -l mod (command git status --porcelain=v1 --ignore-submodules=dirty \
-                | grep -e '^ \?M' | wc -l)
+                | grep -e '^ \?\(M\|R\)' | wc -l)
     set -l del (command git status --porcelain=v1 --ignore-submodules=dirty \
                 | grep -e '^ \?D' | wc -l)
     set -l stashed (command git stash list --no-decorate \
