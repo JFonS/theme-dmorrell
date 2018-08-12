@@ -38,7 +38,7 @@ function __dmorrell_print_git_branch_state
       "
     else
       # no upstream branch configured
-      echo "$__dmorrell_git_icon_ahead "
+      echo "$__dmorrell_git_icon_new "
     end
 end
 
