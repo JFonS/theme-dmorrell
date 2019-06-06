@@ -28,7 +28,7 @@ Install using
     [Oh My Fish](https://github.com/oh-my-fish/oh-my-fish):
 
 ```fish
-omf install git@github.com:reitzig/theme-dmorrell.git
+omf install https://github.com/reitzig/theme-dmorrell.git 
 omf theme dmorrell
 ```
 
