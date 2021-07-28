@@ -28,7 +28,7 @@ set -g __dmorrell_git_color_rev_fg_warn "brred"
 
 
 function __dmorrell_print_git_branch_state
-    set upstream_state (command git rev-list --count --left-right "@{upstream}...HEAD" ^ /dev/null)
+    set upstream_state (command git rev-list --count --left-right "@{upstream}...HEAD" 2> /dev/null)
     if [ $status = 0 ]
       echo "$upstream_state" | command awk "
           /0\t0/          { exit 0 }
